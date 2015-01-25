@@ -319,7 +319,6 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 mItems.add(getScreenrecordAction());
             } else if (GLOBAL_ACTION_KEY_ONTHEGO.equals(actionKey)) {
                 mItems.add(getOTGToggleAction());
-//                mItems.add(getScreenrecordAction());
             } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
                 mItems.add(mAirplaneModeOn);
             } else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
