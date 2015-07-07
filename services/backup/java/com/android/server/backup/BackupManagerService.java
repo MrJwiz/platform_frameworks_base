@@ -2939,6 +2939,7 @@ public class BackupManagerService {
             final String pkgName = mCurrentPackage.packageName;
             final long filepos = mBackupDataName.length();
             if (mBackupData == null) {
+            if (mBackupDataName == null) {
                 failAgent(mAgentBinder, "Backup data was null: " + mBackupDataName);
                 addBackupTrace("backup data was null: " + mBackupDataName);
                 agentErrorCleanup();
