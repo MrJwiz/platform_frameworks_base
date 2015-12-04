@@ -631,6 +631,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // use the same delay values as for screenshot
     private boolean mScreenrecordChordEnabled;
     private boolean mScreenrecordChordVolumeUpKeyConsumed;
+    private boolean mVolumeMusicControls;
+    private boolean mIsLongPress;
+
+    // used for both screenshot and screenrecord
+    private long mVolumeDownKeyTime;
+    private boolean mVolumeDownKeyTriggered;
+    private boolean mVolumeUpKeyTriggered;
+    private long mVolumeUpKeyTime;
+    private boolean mPowerKeyTriggered;
+    private long mPowerKeyTime;
+
+    // use the same delay values as for screenshot
+    private boolean mScreenrecordChordEnabled;
+    private boolean mScreenrecordChordVolumeUpKeyConsumed;
 
     /* The number of steps between min and max brightness */
     private static final int BRIGHTNESS_STEPS = 10;
@@ -1009,6 +1023,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // If the power key has still not yet been handled, then detect short
         // press, long press, or multi press and decide what to do.
         mPowerKeyHandled = hungUp || mVolumeDownKeyTriggered || gesturedServiceIntercepted || mVolumeUpKeyTriggered;
+        mPowerKeyHandled = hungUp || mVolumeDownKeyTriggered || mVolumeUpKeyTriggered;
         if (!mPowerKeyHandled) {
             if (interactive) {
                 // When interactive, we're already awake.
