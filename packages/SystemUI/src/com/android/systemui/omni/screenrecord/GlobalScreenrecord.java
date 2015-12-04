@@ -245,6 +245,7 @@ class GlobalScreenrecord {
 
             try {
                 copyFileUsingStream(input, output);
+                input.delete();
             } catch (IOException e) {
                 Log.e(TAG, "Unable to copy output file", e);
                 Message msg = Message.obtain(mHandler, MSG_TASK_ERROR);
@@ -258,6 +259,11 @@ class GlobalScreenrecord {
             // also make sure to tell media scammer that the tmp file got deleted
             MediaScannerConnection.scanFile(mContext,
                 new String[] { output.getAbsolutePath(), input.getAbsolutePath() }, null,
+            }
+
+            // Make it appear in gallery, run MediaScanner
+            MediaScannerConnection.scanFile(mContext,
+                new String[] { output.getAbsolutePath() }, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                 public void onScanCompleted(String path, Uri uri) {
                     Log.i(TAG, "MediaScanner done scanning " + path);
