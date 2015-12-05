@@ -319,6 +319,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 mItems.add(getScreenRecordAction());
             } else if (GLOBAL_ACTION_KEY_ONTHEGO.equals(actionKey)) {
                 mItems.add(getOTGToggleAction());
+                mItems.add(getScreenrecordAction());
             } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
                 mItems.add(mAirplaneModeOn);
             } else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
@@ -461,6 +462,25 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             }
         };
     }
+    
+    private Action getScreenrecordAction() {
+        return new SinglePressAction(com.android.internal.R.drawable.ic_lock_screenrecord,
+                R.string.global_action_screenrecord) {
+
+            public void onPress() {
+                takeScreenrecord();
+            }
+
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            public boolean showBeforeProvisioning() {
+                return false;
+            }
+        };
+    }
+
 
     private Action getScreenRecordAction() {
         return new SinglePressAction(com.android.internal.R.drawable.ic_lock_screen_record,
