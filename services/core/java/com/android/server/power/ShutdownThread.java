@@ -286,6 +286,7 @@ public final class ShutdownThread extends Thread {
         } catch (RemoteException e) {
             Log.e(TAG, "failure trying to perform soft reboot", e);
         }
+    }
     private static int getAdvancedReboot(Context context) {
         return Settings.Secure.getInt(context.getContentResolver(),
                 Settings.Secure.ADVANCED_REBOOT, 1);
