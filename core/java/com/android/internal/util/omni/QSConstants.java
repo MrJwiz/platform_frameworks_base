@@ -53,6 +53,7 @@ public class QSConstants {
     public static final String TILE_SYNC = "sync";
     public static final String TILE_BATTERY_SAVER = "battery_saver";
     public static final String TILE_EDIT = "edit";
+    public static final String TILE_TWISTED = "twisted";
     public static final String TILE_DND = "dnd";
 
     public static final String DYNAMIC_TILE_NEXT_ALARM = "next_alarm";
@@ -75,6 +76,7 @@ public class QSConstants {
         TILES_DEFAULT.add(TILE_HOTSPOT);
         TILES_DEFAULT.add(TILE_INVERSION);
         TILES_DEFAULT.add(TILE_DND);
+        TILES_DEFAULT.add(TILE_TWISTED);
     }
 
     protected static final ArrayList<String> STATIC_TILES_AVAILABLE = new ArrayList<String>();
@@ -113,6 +115,7 @@ public class QSConstants {
 //        STATIC_TILES_AVAILABLE.add(TILE_HEADS_UP);
 //        STATIC_TILES_AVAILABLE.add(TILE_AMBIENT_DISPLAY);
         STATIC_TILES_AVAILABLE.add(TILE_SYNC);
+        STATIC_TILES_AVAILABLE.add(TILE_TWISTED);
 //        STATIC_TILES_AVAILABLE.add(TILE_BATTERY_SAVER);
 
         TILES_AVAILABLE.addAll(STATIC_TILES_AVAILABLE);

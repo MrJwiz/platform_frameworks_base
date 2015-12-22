@@ -53,6 +53,7 @@ import com.android.systemui.qs.tiles.RebootTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenOffTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
+import com.android.systemui.qs.tiles.TwistedTile;
 import com.android.systemui.qs.tiles.VolumeTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.SyncTile;
@@ -316,6 +317,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("reboot")) return new RebootTile(this);
         else if (tileSpec.equals("battery_saver")) return new BatterySaverTile(this);
         else if (tileSpec.equals("expanded_desktop")) return new ExpandedDesktopTile(this);
+        else if (tileSpec.equals("twisted")) return new TwistedTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
     }
@@ -384,6 +386,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("cast")) return R.string.quick_settings_cast_title;
         else if (spec.equals("hotspot")) return R.string.quick_settings_hotspot_label;
         else if (spec.equals("edit")) return R.string.quick_settings_edit_label;
+        else if (spec.equals("twisted")) return R.string.quick_settings_twisted_label;
         return 0;
     }
 }

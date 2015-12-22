@@ -86,6 +86,7 @@ public class QSUtils {
             boolean removeTile = false;
             switch (tileKey) {
                 case QSConstants.TILE_CELLULAR:
+                case QSConstants.TILE_TWISTED:
                 case QSConstants.TILE_HOTSPOT:
                 case QSConstants.TILE_DATA:
                 case QSConstants.TILE_ROAMING:
