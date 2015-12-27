@@ -722,12 +722,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 case MSG_UPDATE_DREAMING_SLEEP_TOKEN:
                     updateDreamingSleepToken(msg.arg1 != 0);
                     break;
-<<<<<<< HEAD
-                case MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK:
-                    dispatchMediaKeyWithWakeLockToAudioService((KeyEvent)msg.obj);
-                    dispatchMediaKeyWithWakeLockToAudioService(KeyEvent.changeAction((KeyEvent)msg.obj, KeyEvent.ACTION_UP));
-                    break;
-=======
                 case MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK: {
                     KeyEvent event = (KeyEvent) msg.obj;
                     mIsLongPress = true;
@@ -736,7 +730,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             KeyEvent.changeAction(event, KeyEvent.ACTION_UP));
                     break;
                 }
->>>>>>> 3973456... Fix volume key music controls and wake up
             }
         }
     }
@@ -5395,7 +5388,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
 
                 // Disable music and volume control when used as wake key
-                if ((result & ACTION_PASS_TO_USER) == 0 && !mVolumeWakeScreen) {
+                if ((result & ACTION_PASS_TO_USER) == 0) {
                     boolean mayChangeVolume = false;
 
                     if (isMusicActive()) {
@@ -5424,16 +5417,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             mayChangeVolume = down;
                         }
                     }
-<<<<<<< HEAD
-                }
-
-                if ((result & ACTION_PASS_TO_USER) == 0) {
-                    // If we aren't passing to the user and no one else
-                    // handled it send it to the session manager to figure
-                    // out.
-                    MediaSessionLegacyHelper.getHelper(mContext)
-                            .sendVolumeKeyEvent(event, true);
-=======
 
                     if (mUseTvRouting) {
                         dispatchDirectAudioEvent(event);
@@ -5448,11 +5431,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         MediaSessionLegacyHelper.getHelper(mContext)
                                 .sendVolumeKeyEvent(newEvent, true);
                     }
->>>>>>> 3973456... Fix volume key music controls and wake up
                     break;
                 }
-                }
                 break;
+            }
 
             case KeyEvent.KEYCODE_ENDCALL: {
                 result &= ~ACTION_PASS_TO_USER;
