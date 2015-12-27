@@ -731,18 +731,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             KeyEvent.changeAction(event, KeyEvent.ACTION_UP));
                     break;
                 }
-                case MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK:
-                    dispatchMediaKeyWithWakeLockToAudioService((KeyEvent)msg.obj);
-                    dispatchMediaKeyWithWakeLockToAudioService(KeyEvent.changeAction((KeyEvent)msg.obj, KeyEvent.ACTION_UP));
-                    break;
-                case MSG_DISPATCH_VOLKEY_WITH_WAKE_LOCK: {
-                    KeyEvent event = (KeyEvent) msg.obj;
-                    mIsLongPress = true;
-                    dispatchMediaKeyWithWakeLockToAudioService(event);
-                    dispatchMediaKeyWithWakeLockToAudioService(
-                            KeyEvent.changeAction(event, KeyEvent.ACTION_UP));
-                    break;
-                }
             }
         }
     }
@@ -5404,24 +5392,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     boolean mayChangeVolume = false;
 
                     if (isMusicActive()) {
-                        if (mVolBtnMusicControls) {
-                            // Detect long key presses.
-                            if (down) {
-                                mIsLongPress = false;
-                                // Map MUTE key to MEDIA_PLAY_PAUSE
-                                int newKeyCode = KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
-                                switch (keyCode) {
-                                    case KeyEvent.KEYCODE_VOLUME_DOWN:
-                                        newKeyCode = KeyEvent.KEYCODE_MEDIA_PREVIOUS;
-                                        break;
-                                    case KeyEvent.KEYCODE_VOLUME_UP:
-                                        newKeyCode = KeyEvent.KEYCODE_MEDIA_NEXT;
-                                        break;
-                                }
-                if ((result & ACTION_PASS_TO_USER) == 0 && !mVolumeWakeScreen) {
-                    boolean mayChangeVolume = false;
-
-                    if (isMusicActive()) {
                         if (mVolBtnMusicControls && (keyCode != KeyEvent.KEYCODE_VOLUME_MUTE)) {
                             // Detect long key presses.
                             if (down) {
@@ -5447,14 +5417,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             mayChangeVolume = down;
                         }
                     }
-                }
 
-                if ((result & ACTION_PASS_TO_USER) == 0) {
-                    // If we aren't passing to the user and no one else
-                    // handled it send it to the session manager to figure
-                    // out.
-                    MediaSessionLegacyHelper.getHelper(mContext)
-                            .sendVolumeKeyEvent(event, true);
                     if (mUseTvRouting) {
                         dispatchDirectAudioEvent(event);
                     } else if (mayChangeVolume) {
