@@ -221,6 +221,7 @@ public class NavigationBarView extends LinearLayout {
             }
             if (mDimNavButtons && !mIsExpandedDesktopOn &&
                     !(mKgm != null ? mKgm.isDeviceLocked() : false)) {
+            if (mDimNavButtons) {
                 mHandler.postDelayed(mNavButtonDimmer, mDimNavButtonsTimeout);
                 mIsHandlerCallbackActive = true;
             }
@@ -235,6 +236,7 @@ public class NavigationBarView extends LinearLayout {
             if (mFadeOut != null) {
                 mFadeOut.cancel();
             }
+            navButtons.clearAnimation();
             mIsDim = false;
             navButtons.setAlpha(mOriginalAlpha);
         }
@@ -980,6 +982,8 @@ public class NavigationBarView extends LinearLayout {
                         }
                     });
                    mFadeOut.start();
+                    fadeOut.setFillAfter(true);
+                    navButtons.startAnimation(fadeOut);
                 } else {
                     navButtons.setAlpha(mDimNavButtonsAlpha);
                 }
