@@ -430,7 +430,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
-    boolean mIsLongPress;
+    //boolean mIsLongPress;
 
     // The last window we were told about in focusChanged.
     WindowState mFocusedWindow;
@@ -633,18 +633,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mScreenrecordChordVolumeUpKeyConsumed;
     private boolean mVolumeMusicControls;
     private boolean mIsLongPress;
-
-    // used for both screenshot and screenrecord
-    private long mVolumeDownKeyTime;
-    private boolean mVolumeDownKeyTriggered;
-    private boolean mVolumeUpKeyTriggered;
-    private long mVolumeUpKeyTime;
-    private boolean mPowerKeyTriggered;
-    private long mPowerKeyTime;
-
-    // use the same delay values as for screenshot
-    private boolean mScreenrecordChordEnabled;
-    private boolean mScreenrecordChordVolumeUpKeyConsumed;
 
     /* The number of steps between min and max brightness */
     private static final int BRIGHTNESS_STEPS = 10;

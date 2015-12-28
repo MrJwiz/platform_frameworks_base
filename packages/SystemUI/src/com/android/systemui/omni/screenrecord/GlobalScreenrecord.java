@@ -258,12 +258,6 @@ class GlobalScreenrecord {
             // also make sure to tell media scammer that the tmp file got deleted
             MediaScannerConnection.scanFile(mContext,
                 new String[] { output.getAbsolutePath(), input.getAbsolutePath() }, null,
-            }
-
-            // Make it appear in gallery, run MediaScanner
-            // also make sure to tell media scammer that the tmp file got deleted
-            MediaScannerConnection.scanFile(mContext,
-                new String[] { output.getAbsolutePath(), input.getAbsolutePath() }, null,
                 new MediaScannerConnection.OnScanCompletedListener() {
                 public void onScanCompleted(String path, Uri uri) {
                     Log.i(TAG, "MediaScanner done scanning " + path);
