@@ -215,7 +215,7 @@ public class UsageStatsService extends SystemService implements
             mPowerManager = getContext().getSystemService(PowerManager.class);
 
             mScreenOnSystemTimeSnapshot = System.currentTimeMillis();
-
+            
             mDisplayManager.registerDisplayListener(mDisplayListener, mHandler);
             synchronized (mLock) {
                 mScreenOnTime = readScreenOnTimeLocked();
@@ -395,6 +395,12 @@ public class UsageStatsService extends SystemService implements
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_INFORM_LISTENERS,
                         userId, isIdle ? 1 : 0, packageName));
                 synchronized (mLock) {
+                final boolean isIdle = isAppIdleFiltered(packageName, 
+                        UserHandle.getAppId(pi.applicationInfo.uid),
+                        userId, service, timeNow, screenOnTime);
+                 mHandler.sendMessage(mHandler.obtainMessage(MSG_INFORM_LISTENERS,
+                             userId, isIdle ? 1 : 0, packageName));
+                 synchronized (mLock) {
                     mAppIdleHistory.addEntry(packageName, userId, isIdle, timeNow);
                 }
             }
