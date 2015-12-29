@@ -4143,6 +4143,12 @@ public final class Settings {
          * @hide
          */
         public static final String ON_THE_GO_SERVICE_RESTART = "on_the_go_service_restart";
+        /** Display second in the Clock
+         *
+         * @hide
+         */
+
+        public static final String CLOCK_USE_SECOND = "clock_use_second";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
