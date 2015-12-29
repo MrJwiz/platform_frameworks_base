@@ -65,6 +65,7 @@
 
     <!-- Global Actions -->
     <string name="global_action_screenshot">Screenshot</string>
+    <string name="global_action_screen_record">Screen record</string>
     <string name="global_action_search">Search</string>
     <string name="global_action_voicesearch">Voice Search</string>
     <!-- Vendor mismatched fingerprint warning [CHAR LIMIT=NONE] -->
