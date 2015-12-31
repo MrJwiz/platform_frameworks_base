@@ -245,6 +245,7 @@ class GlobalScreenrecord {
 
             try {
                 copyFileUsingStream(input, output);
+                input.delete();
             } catch (IOException e) {
                 Log.e(TAG, "Unable to copy output file", e);
                 Message msg = Message.obtain(mHandler, MSG_TASK_ERROR);
