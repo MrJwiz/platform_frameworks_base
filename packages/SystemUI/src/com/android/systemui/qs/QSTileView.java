@@ -17,7 +17,6 @@
 
 package com.android.systemui.qs;
 
-import android.annotation.Nullable;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -29,7 +28,6 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.util.MathUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -50,8 +48,6 @@ import java.util.Objects;
 public class QSTileView extends ViewGroup {
     private static final Typeface CONDENSED = Typeface.create("sans-serif-condensed",
             Typeface.NORMAL);
-
-    private static final String TAG = "QSTileView";
 
     protected final Context mContext;
     private final View mIcon;
@@ -128,7 +124,6 @@ public class QSTileView extends ViewGroup {
     }
 
     private void recreateLabel() {
-        Log.d(TAG, "recreateLabel() called with " + "");
         CharSequence labelText = null;
         CharSequence labelDescription = null;
         if (mLabel != null) {
@@ -138,7 +133,7 @@ public class QSTileView extends ViewGroup {
         }
         if (mDualLabel != null) {
             labelText = mDualLabel.getText();
-            labelDescription = mDualLabel.getContentDescription();
+            labelDescription = mLabel.getContentDescription();
             removeView(mDualLabel);
             mDualLabel = null;
         }
@@ -190,11 +185,15 @@ public class QSTileView extends ViewGroup {
     }
 
     public boolean setDual(boolean dual, boolean hasDetails) {
+    public boolean setDual(boolean dual) {
         final boolean changed = dual != mDual;
         mDual = dual;
         mDualDetails = hasDetails;
         if (changed) {
             recreateLabel();
+        }
+        if (mTileBackground instanceof RippleDrawable) {
+            setRipple((RippleDrawable) mTileBackground);
         }
         if (dual) {
             mTopBackgroundView.setOnClickListener(mClickPrimary);
@@ -202,12 +201,14 @@ public class QSTileView extends ViewGroup {
             setOnClickListener(null);
             setOnLongClickListener(null);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            mTopBackgroundView.setBackground(mTileBackground);
         } else {
             mTopBackgroundView.setOnClickListener(null);
             mTopBackgroundView.setOnLongClickListener(null);
             setOnClickListener(mClickPrimary);
             setOnLongClickListener(mClickLong);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+            setBackground(mTileBackground);
         }
         setTileBackground();
         mTopBackgroundView.setClickable(dual);
@@ -230,10 +231,9 @@ public class QSTileView extends ViewGroup {
         setBackground(!mDual ? mTileBackground : null);
     }
 
-
     private void setRipple(RippleDrawable tileBackground) {
         mRipple = tileBackground;
-        if (getWidth() != 0 && mRipple != null) {
+        if (getWidth() != 0) {
             updateRippleSize(getWidth(), getHeight());
         }
     }
@@ -244,7 +244,7 @@ public class QSTileView extends ViewGroup {
         mClickLong = clickLong;
     }
 
-    public Drawable getTileBackground() {
+    private Drawable getTileBackground() {
         final int[] attrs = new int[] { android.R.attr.selectableItemBackgroundBorderless };
         final TypedArray ta = mContext.obtainStyledAttributes(attrs);
         final Drawable d = ta.getDrawable(0);

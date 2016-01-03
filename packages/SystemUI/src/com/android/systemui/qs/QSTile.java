@@ -86,6 +86,7 @@ public abstract class QSTile<TState extends State> implements Listenable {
     }
 
     public boolean hasDualTargetsDetails() {
+    public boolean supportsDualTargets() {
         return false;
     }
 
@@ -346,8 +347,6 @@ public abstract class QSTile<TState extends State> implements Listenable {
 
         public interface Callback {
             void onTilesChanged();
-            void setEditing(boolean editing);
-            boolean isEditing();
         }
     }
 

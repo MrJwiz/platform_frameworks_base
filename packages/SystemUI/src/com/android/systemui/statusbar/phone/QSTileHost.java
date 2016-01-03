@@ -17,18 +17,14 @@
 package com.android.systemui.statusbar.phone;
 
 import android.app.PendingIntent;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Process;
-import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.R;
 import com.android.systemui.qs.QSTile;
 import com.android.systemui.qs.tiles.AdbOverNetworkTile;
@@ -42,7 +38,6 @@ import com.android.systemui.qs.tiles.CellularTile;
 import com.android.systemui.qs.tiles.ColorInversionTile;
 import com.android.systemui.qs.tiles.CompassTile;
 import com.android.systemui.qs.tiles.DndTile;
-import com.android.systemui.qs.tiles.EditTile;
 import com.android.systemui.qs.tiles.ExpandedDesktopTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
@@ -89,6 +84,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
 
     public static final String TILES_SETTING = "sysui_qs_tiles";
     public static final int TILES_PER_PAGE = 8;
+    protected static final String TILES_SETTING = "sysui_qs_tiles";
 
     private final Context mContext;
     private final PhoneStatusBar mStatusBar;
@@ -142,14 +138,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
         TunerService.get(mContext).removeTunable(this);
     }
 
-    public boolean isEditing() {
-        return mCallback.isEditing();
-    }
-
-    public void setEditing(boolean editing) {
-        mCallback.setEditing(editing);
-    }
- 
     @Override
     public void setCallback(Callback callback) {
         mCallback = callback;
@@ -158,19 +146,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
     @Override
     public Collection<QSTile<?>> getTiles() {
         return mTiles.values();
-    }
-
-    public List<String> getTileSpecs() {
-        return mTileSpecs;
-    }
-
-    public String getSpec(QSTile<?> tile) {
-        for (Map.Entry<String, QSTile<?>> entry : mTiles.entrySet()) {
-            if (entry.getValue() == tile) {
-                return entry.getKey();
-            }
-        }
-        return null;
     }
 
     @Override
@@ -292,14 +267,13 @@ public class QSTileHost implements QSTile.Host, Tunable {
         }
     }
 
-    public QSTile<?> createTile(String tileSpec) {
+    protected QSTile<?> createTile(String tileSpec) {
         if (tileSpec.equals("wifi")) return new WifiTile(this);
         else if (tileSpec.equals("bt")) return new BluetoothTile(this);
         else if (tileSpec.equals("inversion")) return new ColorInversionTile(this);
         else if (tileSpec.equals("cell")) return new CellularTile(this);
         else if (tileSpec.equals("airplane")) return new AirplaneModeTile(this);
         else if (tileSpec.equals("dnd")) return new DndTile(this);
-        else if (tileSpec.equals("edit")) return new EditTile(this);
         else if (tileSpec.equals("rotation")) return new RotationLockTile(this);
         else if (tileSpec.equals("flashlight")) return new FlashlightTile(this);
         else if (tileSpec.equals("location")) return new LocationTile(this);
@@ -357,6 +331,7 @@ public class QSTileHost implements QSTile.Host, Tunable {
         }
         return tiles;
     }
+<<<<<<< HEAD
 
     public void remove(String tile) {
         MetricsLogger.action(getContext(), MetricsLogger.TUNER_QS_REMOVE, tile);
@@ -393,4 +368,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("twisted")) return R.string.quick_settings_twisted_label;
         return 0;
     }
+=======
+>>>>>>> parent of 83f2e3c... WIP: draggable quick settings tiles
 }
