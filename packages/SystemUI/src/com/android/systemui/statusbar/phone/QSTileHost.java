@@ -323,15 +323,8 @@ public class QSTileHost implements QSTile.Host, Tunable {
                 tiles.add(tile);
             }
         }
-        // ensure edit tile is present
-        if (tiles.size() < TILES_PER_PAGE && !tiles.contains("edit")) {
-            tiles.add("edit");
-        } else if (tiles.size() > TILES_PER_PAGE && !tiles.contains("edit")) {
-            tiles.add((TILES_PER_PAGE - 1), "edit");
-        }
         return tiles;
     }
-<<<<<<< HEAD
 
     public void remove(String tile) {
         MetricsLogger.action(getContext(), MetricsLogger.TUNER_QS_REMOVE, tile);
@@ -368,6 +361,4 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (spec.equals("twisted")) return R.string.quick_settings_twisted_label;
         return 0;
     }
-=======
->>>>>>> parent of 83f2e3c... WIP: draggable quick settings tiles
 }
