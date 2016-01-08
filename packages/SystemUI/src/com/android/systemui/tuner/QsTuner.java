@@ -475,6 +475,7 @@ public class QsTuner extends Fragment implements Callback {
             else if (mSpec.equals("expanded_desktop")) return R.drawable.ic_qs_expanded_desktop;
             else if (mSpec.equals("compass")) return R.drawable.ic_qs_compass_on;
             else if (mSpec.equals("adb_network")) return R.drawable.ic_qs_network_adb_on;
+            else if (mSpec.equals("twisted")) return R.drawable.ic_qs_twisted;
             return R.drawable.android;
         }
 
