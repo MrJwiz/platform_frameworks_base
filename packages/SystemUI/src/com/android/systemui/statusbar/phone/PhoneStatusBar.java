@@ -299,6 +299,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     WeatherControllerImpl mWeatherController;
     FingerprintUnlockController mFingerprintUnlockController;
     MinitBatteryController mMinitBatteryController;
+    StatusBarBgAnimationController mStatusBarBgAnimationController;
 
     int mNaturalBarHeight = -1;
 
@@ -979,6 +980,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 // noop
             }
         });
+        mStatusBarBgAnimationController = new StatusBarBgAnimationController(mContext,
+                mStatusBarWindow);
         mNetworkController = new NetworkControllerImpl(mContext, mHandlerThread.getLooper());
         mHotspotController = new HotspotControllerImpl(mContext);
         mBluetoothController = new BluetoothControllerImpl(mContext, mHandlerThread.getLooper());
@@ -3306,6 +3309,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mIconController.updateResources();
         mScreenPinningRequest.onConfigurationChanged();
         mNetworkController.onConfigurationChanged();
+        mStatusBarBgAnimationController.onConfigurationChanged(newConfig.getLayoutDirection());
     }
 
     @Override
@@ -3585,6 +3589,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     @Override
     public void destroy() {
         super.destroy();
+        mStatusBarBgAnimationController.destroy();
         if (mStatusBarWindow != null) {
             mWindowManager.removeViewImmediate(mStatusBarWindow);
             mStatusBarWindow = null;
@@ -3954,9 +3959,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED) {
             mScrimController.setKeyguardShowing(true);
             mIconPolicy.setKeyguardShowing(true);
+            mStatusBarBgAnimationController.setKeyguardShowing(mStatusBarView, true);
         } else {
             mScrimController.setKeyguardShowing(false);
             mIconPolicy.setKeyguardShowing(false);
+            mStatusBarBgAnimationController.setKeyguardShowing(mStatusBarView, false);
         }
         mNotificationPanel.setBarState(mState, mKeyguardFadingAway, goingToFullShade);
         updateDozingState();
