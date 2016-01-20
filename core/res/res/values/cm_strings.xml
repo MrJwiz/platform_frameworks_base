@@ -22,4 +22,7 @@
     <!-- label for item that takes On-The-Go in the phone options dialog -->
     <string name="global_action_onthego">On-The-Go Mode</string>
 
+    <!-- Protected Apps Notification -->
+    <string name="notify_package_component_protected_title">Activity launch blocked</string>
+    <string name="notify_package_component_protected_text"><xliff:g id="app_name">%1$s</xliff:g> is protected from being launched. Click to authenticate and launch the application.</string>
 </resources>

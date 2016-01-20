@@ -2002,6 +2002,26 @@ final class ApplicationPackageManager extends PackageManager {
     }
 
     @Override
+    public void setComponentProtectedSetting(ComponentName componentName, boolean newState) {
+        try {
+            mPM.setComponentProtectedSetting(componentName, newState, mContext.getUserId());
+        } catch (RemoteException re) {
+            Log.e(TAG, "Failed to set component protected setting", re);
+        }
+    }
+
+    /** @hide */
+    @Override
+    public boolean isComponentProtected(String callingPackage, ComponentName componentName) {
+        try {
+            return mPM.isComponentProtected(callingPackage, componentName, mContext.getUserId());
+        } catch (RemoteException re) {
+            Log.e(TAG, "Failed to get component protected setting", re);
+            return false;
+        }
+    }
+
+    @Override
     public PackageInstaller getPackageInstaller() {
         synchronized (mLock) {
             if (mInstaller == null) {
