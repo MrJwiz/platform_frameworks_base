@@ -295,7 +295,6 @@ public class QSTileHost implements QSTile.Host, Tunable {
         else if (tileSpec.equals("twisted")) return new TwistedTile(this);
         else if (tileSpec.equals("compass")) return new CompassTile(this);
         else if (tileSpec.equals("adb_network")) return new AdbOverNetworkTile(this);
-        else if (tileSpec.equals("navbar")) return new NavBarTile(this);
         else if (tileSpec.equals("kernel")) return new KernelAdiutorTile(this);
         else if (tileSpec.startsWith(IntentTile.PREFIX)) return IntentTile.create(this,tileSpec);
         else throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
