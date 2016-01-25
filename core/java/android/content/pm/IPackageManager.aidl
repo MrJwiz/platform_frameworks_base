@@ -509,17 +509,4 @@ interface IPackageManager {
     boolean isPermissionRevokedByPolicy(String permission, String packageName, int userId);
 
     String getPermissionControllerPackageName();
-
-    /** Protected Apps */
-    void setComponentProtectedSetting(in ComponentName componentName,
-    in boolean newState, int userId);
-
-    /** Themes */
-    void updateIconMapping(String pkgName);
-    ComposedIconInfo getComposedIconInfo();
-    int processThemeResources(String themePkgName);
-
-    /** Protected Apps */
-    boolean isComponentProtected(in String callingPackage, in ComponentName componentName,
-            int userId);
 }

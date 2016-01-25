@@ -881,22 +881,6 @@ public class MockPackageManager extends PackageManager {
      * @hide
      */
     @Override
-    public void setComponentProtectedSetting(ComponentName componentName, boolean newState) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @hide
-     */
-    @Override
-    public boolean isComponentProtected(String callingPackage, ComponentName componentName) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * @hide
-     */
-    @Override
     public void installPackage(Uri packageURI, PackageInstallObserver observer,
             int flags, String installerPackageName) {
         throw new UnsupportedOperationException();
