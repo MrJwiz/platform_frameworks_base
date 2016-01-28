@@ -685,7 +685,7 @@ public class NavigationBarView extends LinearLayout {
 
         if (d != null) {
             d.mutate();
-            if (colorize && mNavBarButtonColorMode != 3) 
+            if (colorize && mNavBarButtonColorMode != 3 
                     && !clickAction.equals(ActionConstants.ACTION_BACK)) {
                 d = ImageHelper.getColoredDrawable(d, mNavBarButtonColor);
             }
