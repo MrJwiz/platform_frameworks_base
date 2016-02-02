@@ -226,6 +226,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private static final int MSG_CLOSE_PANELS = 1001;
     private static final int MSG_OPEN_SETTINGS_PANEL = 1002;
     private static final int MSG_LAUNCH_TRANSITION_TIMEOUT = 1003;
+    private static final int MSG_UPDATE_NOTIFICATIONS = 1004;
     // 1020-1040 reserved for BaseStatusBar
 
     // Time after we abort the launch transition.
@@ -301,6 +302,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     WeatherControllerImpl mWeatherController;
     FingerprintUnlockController mFingerprintUnlockController;
     MinitBatteryController mMinitBatteryController;
+    StatusBarBgAnimationController mStatusBarBgAnimationController;
 
     int mNaturalBarHeight = -1;
 
@@ -345,6 +347,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     private boolean mKeyguardShowingMedia;
     private long mKeyguardFadingAwayDelay;
     private long mKeyguardFadingAwayDuration;
+
+    private Bitmap mKeyguardWallpaper;
 
     int mKeyguardMaxNotificationCount;
 
@@ -859,6 +863,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.Global.getUriFor(SETTING_HEADS_UP_TICKER), true,
                     mHeadsUpObserver);
         }
+
+        WallpaperManager wallpaperManager = (WallpaperManager) mContext.getSystemService(
+                Context.WALLPAPER_SERVICE);
+        mKeyguardWallpaper = wallpaperManager.getKeyguardBitmap();
+
         mUnlockMethodCache = UnlockMethodCache.getInstance(mContext);
         mUnlockMethodCache.addListener(this);
         startKeyguard();
@@ -1074,6 +1083,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 // noop
             }
         });
+        mStatusBarBgAnimationController = new StatusBarBgAnimationController(mContext,
+                mStatusBarWindow);
         mNetworkController = new NetworkControllerImpl(mContext, mHandlerThread.getLooper());
         mHotspotController = new HotspotControllerImpl(mContext);
         mBluetoothController = new BluetoothControllerImpl(mContext, mHandlerThread.getLooper());
@@ -1752,12 +1763,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return entry.row.getParent() instanceof NotificationStackScrollLayout;
     }
 
-    @Override
-    protected void updateNotifications() {
+    private void handleUpdateNotifications() {
         mNotificationData.filterAndSort();
 
         updateNotificationShade();
         mIconController.updateNotificationIcons(mNotificationData);
+    }
+
+    @Override
+    protected void updateNotifications() {
+        if (!mHandler.hasMessages(MSG_UPDATE_NOTIFICATIONS)) {
+            mHandler.sendEmptyMessage(MSG_UPDATE_NOTIFICATIONS);
+        }
     }
 
     @Override
@@ -1980,11 +1997,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         // apply user lockscreen image
         if (mMediaMetadata == null && backdropBitmap == null) {
-            WallpaperManager wm = (WallpaperManager)
-                    mContext.getSystemService(Context.WALLPAPER_SERVICE);
-            if (wm != null) {
-                backdropBitmap = wm.getKeyguardBitmap();
-            }
+            backdropBitmap = mKeyguardWallpaper;
         }
 
         final boolean hasBackdrop = backdropBitmap != null;
@@ -2387,6 +2400,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     break;
                 case MSG_LAUNCH_TRANSITION_TIMEOUT:
                     onLaunchTransitionTimeout();
+                    break;
+                case MSG_UPDATE_NOTIFICATIONS:
+                    handleUpdateNotifications();
                     break;
             }
         }
@@ -3338,6 +3354,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             }
             else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 notifyNavigationBarScreenOn(true);
+            } else if (Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED.equals(action)) {
+                WallpaperManager wm = (WallpaperManager) mContext.getSystemService(
+                        Context.WALLPAPER_SERVICE);
+                mKeyguardWallpaper = wm.getKeyguardBitmap();
+                updateMediaMetaData(true);
             }
         }
     };
@@ -3363,6 +3384,9 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     updateMediaMetaData(true);
                 }
             } else if (Intent.ACTION_KEYGUARD_WALLPAPER_CHANGED.equals(action)) {
+                WallpaperManager wm = (WallpaperManager) mContext.getSystemService(
+                        Context.WALLPAPER_SERVICE);
+                mKeyguardWallpaper = wm.getKeyguardBitmap();
                 updateMediaMetaData(true);
             }
         }
@@ -3410,12 +3434,18 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mIconController.updateResources();
         mScreenPinningRequest.onConfigurationChanged();
         mNetworkController.onConfigurationChanged();
+        mStatusBarBgAnimationController.onConfigurationChanged(newConfig.getLayoutDirection());
     }
 
     @Override
     public void userSwitched(int newUserId) {
         super.userSwitched(newUserId);
         if (MULTIUSER_DEBUG) mNotificationPanelDebugText.setText("USER " + newUserId);
+        WallpaperManager wm = (WallpaperManager)
+                mContext.getSystemService(Context.WALLPAPER_SERVICE);
+        mKeyguardWallpaper = null;
+        wm.forgetLoadedKeyguardWallpaper();
+
         animateCollapsePanels();
         updatePublicMode();
         updateNotifications();
@@ -3424,9 +3454,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
         mAssistManager.onUserSwitched(newUserId);
 
-        WallpaperManager wm = (WallpaperManager)
-                mContext.getSystemService(Context.WALLPAPER_SERVICE);
-        wm.forgetLoadedKeyguardWallpaper();
+        mKeyguardWallpaper = wm.getKeyguardBitmap();
         updateMediaMetaData(true);
     }
 
@@ -3689,6 +3717,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     @Override
     public void destroy() {
         super.destroy();
+        mStatusBarBgAnimationController.destroy();
         if (mStatusBarWindow != null) {
             mWindowManager.removeViewImmediate(mStatusBarWindow);
             mStatusBarWindow = null;
@@ -4058,9 +4087,11 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         if (mState == StatusBarState.KEYGUARD || mState == StatusBarState.SHADE_LOCKED) {
             mScrimController.setKeyguardShowing(true);
             mIconPolicy.setKeyguardShowing(true);
+            mStatusBarBgAnimationController.setKeyguardShowing(mStatusBarView, true);
         } else {
             mScrimController.setKeyguardShowing(false);
             mIconPolicy.setKeyguardShowing(false);
+            mStatusBarBgAnimationController.setKeyguardShowing(mStatusBarView, false);
         }
         mNotificationPanel.setBarState(mState, mKeyguardFadingAway, goingToFullShade);
         updateDozingState();
