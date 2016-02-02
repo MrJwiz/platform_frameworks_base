@@ -3930,13 +3930,6 @@ public final class Settings {
         public static final String ALLOW_LIGHTS = "allow_lights";
 
         /**
-         * Change volume up and down handlign based on rotation
-         * Change the number of columns displayed in the Settings dashboard
-         * @hide
-         */
-        public static final String DASHBOARD_COLUMNS = "dashboard_columns";
-
-        /**
          * Display style of the status bar battery information
          * 0: Display the battery an icon in portrait mode
          * 2: Display the battery as a circle
