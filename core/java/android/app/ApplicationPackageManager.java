@@ -2147,11 +2147,9 @@ final class ApplicationPackageManager extends PackageManager {
 
     private UserInfo getUserIfProfile(int userHandle) {
         List<UserInfo> userProfiles = getUserManager().getProfiles(UserHandle.myUserId());
-        if (userProfiles != null) {
-            for (UserInfo user : userProfiles) {
-                if (user.id == userHandle) {
-                    return user;
-                }
+        for (UserInfo user : userProfiles) {
+            if (user.id == userHandle) {
+                return user;
             }
         }
         return null;

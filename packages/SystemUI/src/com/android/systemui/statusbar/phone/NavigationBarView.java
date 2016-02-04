@@ -685,7 +685,7 @@ public class NavigationBarView extends LinearLayout {
 
         if (d != null) {
             d.mutate();
-            if (colorize && mNavBarButtonColorMode != 3
+            if (colorize && mNavBarButtonColorMode != 3 
                     && !clickAction.equals(ActionConstants.ACTION_BACK)) {
                 d = ImageHelper.getColoredDrawable(d, mNavBarButtonColor);
             }
@@ -825,6 +825,7 @@ public class NavigationBarView extends LinearLayout {
         }
 
         mNavigationIconHints = hints;
+
         if (getBackButton() != null ) {
             ((ImageView) getBackButton()).setImageDrawable(null);
             ((ImageView) getBackButton()).setImageDrawable(mVertical ? mBackLandIcon : mBackIcon);
@@ -1434,37 +1435,6 @@ public class NavigationBarView extends LinearLayout {
                 expDeskString.equals("immersive.full=*") : false);
 
         setNavigationIconHints(mNavigationIconHints, true);
-
-        // update back button colors
-        Drawable backIcon, backIconLand;
-        ActionConfig actionConfig;
-        String backIconUri = ActionConstants.ICON_EMPTY;
-        for (int j = 0; j < mButtonsConfig.size(); j++) {
-            actionConfig = mButtonsConfig.get(j);
-            final String action = actionConfig.getClickAction();
-            if (action.equals(ActionConstants.ACTION_BACK)) {
-                backIconUri = actionConfig.getIcon();
-            }
-        }
-
-        if (backIconUri.equals(ActionConstants.ICON_EMPTY)) {
-            backIcon = mContext.getResources().getDrawable(
-                    R.drawable.ic_sysbar_back);
-            backIconLand = mContext.getResources().getDrawable(
-                    R.drawable.ic_sysbar_back_land);
-        } else {
-            backIcon = ActionHelper.getActionIconImage(mContext,
-                    ActionConstants.ACTION_BACK, backIconUri);
-            backIconLand = backIcon;
-        }
-        boolean shouldColor = true;
-        if (backIconUri != null && !backIconUri.equals(ActionConstants.ICON_EMPTY)
-                && !backIconUri.startsWith(ActionConstants.SYSTEM_ICON_IDENTIFIER)
-                && mNavBarButtonColorMode == 1) {
-            shouldColor = false;
-        }
-
-        updateBackButtonDrawables(backIcon, backIconLand, shouldColor);
 
         // construct the navigationbar
         if (recreate) {

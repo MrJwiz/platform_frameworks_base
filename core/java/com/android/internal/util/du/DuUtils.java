@@ -79,7 +79,6 @@ public class DuUtils {
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningServiceInfo> services = activityManager
                 .getRunningServices(Integer.MAX_VALUE);
-} 
 
         if (services != null) {
             for (ActivityManager.RunningServiceInfo info : services) {

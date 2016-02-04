@@ -848,23 +848,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.NAVIGATION_BAR_HEIGHT), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.VOLBTN_MUSIC_CONTROLS), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.KEYGUARD_TOGGLE_TORCH), false, this,
-		    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.NAVIGATION_BAR_CAN_MOVE), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.THREE_FINGER_GESTURE), false, this,
-                    UserHandle.USER_ALL);
-                    Settings.System.NAVIGATION_BAR_HEIGHT), false, this,
-                    UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_HEIGHT_LANDSCAPE), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -872,6 +855,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NAVIGATION_BAR_SHOW), false, this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.THREE_FINGER_GESTURE), false, this,
                     UserHandle.USER_ALL);
             updateSettings();
         }
@@ -2159,10 +2145,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             mUserRotationAngles = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
-
-            mNavigationBarCanMove = Settings.System.getIntForUser(resolver,
-                    Settings.System.NAVIGATION_BAR_CAN_MOVE,
-                    mShortSizeDp < 600 ? 1 : 0, UserHandle.USER_CURRENT) == 1;
 
             mNavigationBarCanMove = Settings.System.getIntForUser(resolver,
                     Settings.System.NAVIGATION_BAR_CAN_MOVE,
@@ -6047,20 +6029,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                 // TODO: Long press of MUTE could be mapped to KEYCODE_MEDIA_PLAY_PAUSE
                                 int newKeyCode = event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP ?
                                         KeyEvent.KEYCODE_MEDIA_NEXT : KeyEvent.KEYCODE_MEDIA_PREVIOUS;
-                        if (mVolBtnMusicControls) {
-                            // Detect long key presses.
-                            if (down) {
-                                mIsLongPress = false;
-                                // Map MUTE key to MEDIA_PLAY_PAUSE
-                                int newKeyCode = KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE;
-                                switch (keyCode) {
-                                    case KeyEvent.KEYCODE_VOLUME_DOWN:
-                                        newKeyCode = KeyEvent.KEYCODE_MEDIA_PREVIOUS;
-                                        break;
-                                    case KeyEvent.KEYCODE_VOLUME_UP:
-                                        newKeyCode = KeyEvent.KEYCODE_MEDIA_NEXT;
-                                        break;
-                                }
                                 scheduleLongPressKeyEvent(event, newKeyCode);
                                 // Consume key down events of all presses.
                                 break;
