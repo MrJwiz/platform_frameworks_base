@@ -4710,10 +4710,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     private void applyStableConstraints(int sysui, int fl, Rect r, Rect d) {
-        if (mNavigationBarLeftInLandscape) {
-            d.left = r.left;
-            r.left = 0;
-        }
+//        if (mNavigationBarLeftInLandscape) {
+//            d.left = r.left;
+//            r.left = 0;
+//        }
 
         if ((sysui & View.SYSTEM_UI_FLAG_LAYOUT_STABLE) != 0) {
             // If app is requesting a stable layout, don't let the
